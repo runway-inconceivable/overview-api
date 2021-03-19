@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS photos CASCADE;
 DROP TABLE IF EXISTS skus CASCADE;
 
 CREATE TABLE products (
-  productId serial PRIMARY KEY,
+  product_id serial PRIMARY KEY,
   name VARCHAR ( 225 ) NOT NULL,
   slogan VARCHAR ( 225 ) NOT NULL,
   description VARCHAR ( 1000 ) NOT NULL,
@@ -23,28 +23,28 @@ CREATE TABLE features (
 );
 
 CREATE TABLE products_features (
-  productId serial,
+  product_id serial,
   featureId serial,
   FOREIGN KEY (featureId) REFERENCES features (featureId),
-  FOREIGN KEY (productId) REFERENCES products (productId)
+  FOREIGN KEY (product_id) REFERENCES products (product_id)
 );
 
 
 CREATE TABLE related_products (
   id serial PRIMARY KEY,
-  productId serial,
+  product_id serial,
   related_product_id INT NOT NULL,
-  FOREIGN KEY (productId) REFERENCES products (productId)
+  FOREIGN KEY (product_id) REFERENCES products (product_id)
 );
 
 CREATE TABLE styles (
-  productId serial,
+  product_id serial,
   style_id serial PRIMARY KEY,
   name VARCHAR ( 50 ) NOT NULL,
   orignal_price VARCHAR ( 50 ) NOT NULL,
   sale_price VARCHAR ( 50 ),
   default_pirce BOOLEAN,
-  FOREIGN KEY (productId) REFERENCES products (productId)
+  FOREIGN KEY (product_id) REFERENCES products (product_id)
 );
 
 CREATE TABLE photos (
