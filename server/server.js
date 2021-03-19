@@ -11,8 +11,9 @@ app.use(express.json());
 
 const relatedProducts = (rows) => rows.map((product) => product.related_product_id);
 
-app.get('/products/:params/related', (req, res) => {
-  const sql = `SELECT * FROM related_products WHERE product_id = ${params}`;
+app.get('/products/:product_id/related', (req, res) => {
+  const { product_id } = req.params;
+  const sql = `SELECT * FROM related_products WHERE product_id = ${product_id}`;
   db.query(sql, (err, data) => {
     if (err) {
       console.log(err);
@@ -23,10 +24,8 @@ app.get('/products/:params/related', (req, res) => {
   });
 });
 
-
-
-app.get('/products/:params/styles', (req, res) => {
-  const { params } = req.params;
+app.get('/products/:product_id/styles', async (req, res) => {
+  const { product_id } = req.params;
   const photosNested = `SELECT
   styles.style_id, styles.name, styles.original_price, styles.sale_price, styles.default_price,
   JSON_AGG(json_build_object(
@@ -36,39 +35,56 @@ app.get('/products/:params/styles', (req, res) => {
   FROM
   styles
   INNER JOIN photos
-  ON (styles.style_id = photos.style_id) WHERE (styles.product_id = ${params})
+  ON (styles.style_id = photos.style_id)
+  WHERE (styles.product_id = $1)
   GROUP BY
   styles.style_id
+
   ;`;
 
-  const skusQuery = `SELECT skus.skus_id, skus.quantity, skus.size FROM skus WHERE skus.style_id = 5;`;
+  const skusQuery = `SELECT skus.skus_id, skus.quantity, skus.size FROM skus WHERE skus.style_id = $1;`;
+  try {
+    const styleData = await db.query(photosNested, [product_id]);
+    const addSkuToStyle = async (style) => {
+      const skusData = await db.query(skusQuery, [style.style_id]);
+      const skus = skusData.rows.map((sku) => {
+        const skusId = sku.skus_id;
+        const skuObj = {
+          [skusId]: {
+            quanity: sku.quantity,
+            size: sku.size,
+          },
+        };
+        return skuObj;
+      });
 
-  db.query(photosNested, (err, data) => {
-    if (err) {
-      console.log(err);
-      res.send(500);
-    } else {
-      console.log(data.rows);
-      res.send(data.rows);
-    }
-  });
+      return {
+        style_id: style.style_id,
+        name: style.name,
+        sale_price: style.sale_price,
+        'default?': style.default_price,
+        photos: style.photos,
+        skus,
+      };
+    };
+
+
+    const getStyleSkus = async () => Promise.all(styleData.rows.map((style) => addSkuToStyle(style)));
+    getStyleSkus().then((styleResults) => {
+      const styleIdResponse = {
+        product_id,
+        results: styleResults,
+      };
+      res.send(styleIdResponse);
+    });
+
+
+
+  } catch (err) {
+    console.log(err.stack);
+    res.sendStatus(500);
+  }
 });
-
-// db.query(photosNested, (err, productAndPhotoData) => {
-//   if (err) {
-//     console.log(err);
-//     res.send(500);
-//   } else {
-//     db.query(skusQuery, (err, skusData) => {
-//       if (err) {
-//         console.log(err);
-//         res.send(500);
-//       } else {
-
-//       }
-//      });
-//    };
-//   });
 
 
 app.listen(port, () => {

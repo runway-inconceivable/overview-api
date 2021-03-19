@@ -43,7 +43,7 @@ CREATE TABLE styles (
   name VARCHAR ( 50 ) NOT NULL,
   orignal_price VARCHAR ( 50 ) NOT NULL,
   sale_price VARCHAR ( 50 ),
-  default_pirce BOOLEAN,
+  default_price BOOLEAN,
   FOREIGN KEY (product_id) REFERENCES products (product_id)
 );
 
