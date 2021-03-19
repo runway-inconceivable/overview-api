@@ -47,15 +47,13 @@ app.get('/products/:product_id/styles', async (req, res) => {
     const styleData = await db.query(photosNested, [product_id]);
     const addSkuToStyle = async (style) => {
       const skusData = await db.query(skusQuery, [style.style_id]);
-      const skus = skusData.rows.map((sku) => {
+      const skus = {};
+      skusData.rows.forEach((sku) => {
         const skusId = sku.skus_id;
-        const skuObj = {
-          [skusId]: {
-            quanity: sku.quantity,
-            size: sku.size,
-          },
+        skus[skusId] = {
+          quanity: sku.quantity,
+          size: sku.size,
         };
-        return skuObj;
       });
 
       return {
