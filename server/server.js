@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+
 const db = require('../database');
 
 const app = express();
@@ -8,10 +9,9 @@ const port = 3000;
 app.use(morgan('dev'));
 app.use(express.json());
 
-
 app.get('/products/:product_id/related', (req, res) => {
   const { product_id } = req.params;
-  const sql = `SELECT * FROM related_products WHERE product_id = $1`;
+  const sql = 'SELECT * FROM related_products WHERE product_id = $1';
   const relatedProducts = (rows) => rows.map((product) => product.related_product_id);
   db.query(sql, [product_id], (err, data) => {
     if (err) {
@@ -53,7 +53,7 @@ app.get('/products/:product_id/styles', async (req, res) => {
       skusData.rows.forEach((sku) => {
         const skusId = sku.skus_id;
         skus[skusId] = {
-          quanity: sku.quantity,
+          quantity: sku.quantity,
           size: sku.size,
         };
       });
@@ -84,7 +84,7 @@ app.get('/products/:product_id/styles', async (req, res) => {
 app.get('/products:count?', async (req, res) => {
   const count = req.params.count || 5;
 
-  const sql = `SELECT * FROM products LIMIT $1;`;
+  const sql = 'SELECT * FROM products LIMIT $1;';
   try {
     const productArray = await db.query(sql, [count]);
     const newProductArray = async () => Promise.all(productArray.rows.map((product) => ({
@@ -138,5 +138,5 @@ app.get('/products/:product_id', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Products Api listening at http://localhost:${port}`);
 });
