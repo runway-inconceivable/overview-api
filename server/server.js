@@ -9,6 +9,10 @@ const port = 3000;
 app.use(morgan('dev'));
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.send('hello world');
+})
+
 app.get('/products/:product_id/related', (req, res) => {
   const { product_id } = req.params;
   const sql = 'SELECT * FROM related_products WHERE product_id = $1';
