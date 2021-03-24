@@ -9,6 +9,10 @@ const port = 3000;
 app.use(morgan('dev'));
 app.use(express.json());
 
+app.get('/loaderio-46d47167ba3c5152efe3d0e0c2acbb65', (req, res) => {
+  res.send('loaderio-46d47167ba3c5152efe3d0e0c2acbb65');
+});
+
 app.get('/products/:product_id/related', (req, res) => {
   const { product_id } = req.params;
   const sql = 'SELECT * FROM related_products WHERE product_id = $1';
