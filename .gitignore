@@ -2,3 +2,5 @@ node_modules
 ProductsAPI.pem
 prodctsDB.pem
 productsdump.sql
+nginx.pem
+productsapi2.pem
