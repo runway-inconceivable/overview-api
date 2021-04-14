@@ -12,7 +12,7 @@ Back-end system design
 
 # Introduction
 
-Runway-Inconceivable is a back-end design for a front-end legacy codebase for an e-commerce website focused on clothing and apparel.  The team was comprised of three engineers including myself, and I was responsible for building out the server and database for the ratings and reviews section of the website with the other two engineers handling the product overview and the questions and answers section.  We deployed on AWS EC2 instances and scaled to handle typical web traffic.
+Runway-Inconceivable is a back-end design for a front-end legacy codebase for an e-commerce website focused on clothing and apparel.  The team was comprised of three engineers including myself, and I was responsible for building out the server and database for the product overview section of the website with the other two engineers handling the ratings and reviews and the questions and answers section.  We deployed on AWS EC2 instances and scaled to handle production level web traffic.
 
 # Tech Stack
 
