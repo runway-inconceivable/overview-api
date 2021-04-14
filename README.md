@@ -54,7 +54,7 @@ The MVP expects that a user should be able to interact with the legacy code fron
 
 <br />
 <img src="Schema.png">
-<img src="Afteriphash .png">
+<img src="Afteriphash.png">
 
 # Future Enhancements
 
