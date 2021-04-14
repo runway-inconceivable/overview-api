@@ -1,12 +1,10 @@
 const express = require('express');
-const morgan = require('morgan');
 
 const db = require('../database');
 
 const app = express();
 const port = 3000;
 
-app.use(morgan('dev'));
 app.use(express.json());
 
 app.get('/loaderio-46d47167ba3c5152efe3d0e0c2acbb65', (req, res) => {
